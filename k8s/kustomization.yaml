@@ -56,7 +56,7 @@ images:
   - name: postgres
     newTag: 16-alpine
   - name: ollama/ollama
-    newTag: "0.5.4"
+    newTag: "0.23.2"
 
 # Configuration generation (alternative to static configmaps)
 # configMapGenerator:
