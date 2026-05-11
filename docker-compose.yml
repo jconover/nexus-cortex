@@ -145,7 +145,7 @@ services:
       retries: 3
 
   # Monitoring (prometheus, grafana, alertmanager, dcgm-exporter) now lives in
-  # the nexus-observability repo. Prometheus joins the `ai-stack` network from
+  # the nexus-observability repo. Prometheus joins the `nexus-ai` network from
   # there to scrape rag-backend:8000.
 
   # Frontend - React web UI
@@ -175,5 +175,5 @@ volumes:
 
 networks:
   default:
-    name: ai-stack
+    name: nexus-ai
     external: true

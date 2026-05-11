@@ -60,7 +60,7 @@ setup:
 
 start:
 	@echo "Starting all services (using Docker Hub images)..."
-	@docker network inspect ai-stack >/dev/null 2>&1 || docker network create ai-stack
+	@docker network inspect nexus-ai >/dev/null 2>&1 || docker network create nexus-ai
 	docker compose pull
 	docker compose up -d
 	@echo "Waiting for services to be ready..."
@@ -74,7 +74,7 @@ start:
 
 start-dev:
 	@echo "Starting all services in DEV mode (building locally)..."
-	@docker network inspect ai-stack >/dev/null 2>&1 || docker network create ai-stack
+	@docker network inspect nexus-ai >/dev/null 2>&1 || docker network create nexus-ai
 	docker compose -f docker-compose.dev.yml up -d --build
 	@echo "Waiting for services to be ready..."
 	@sleep 10

@@ -164,5 +164,5 @@ volumes:
 
 networks:
   default:
-    name: ai-stack
+    name: nexus-ai
     external: true
