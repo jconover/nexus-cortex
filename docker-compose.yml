@@ -144,64 +144,9 @@ services:
       timeout: 10s
       retries: 3
 
-  # Prometheus - Metrics collection
-  prometheus:
-    image: prom/prometheus:v2.47.0
-    container_name: prometheus
-    ports:
-      - "127.0.0.1:9090:9090"
-    volumes:
-      - ./monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
-      - ./monitoring/prometheus/alerts.yml:/etc/prometheus/alerts.yml:ro
-      - prometheus_data:/prometheus
-    command:
-      - '--config.file=/etc/prometheus/prometheus.yml'
-      - '--storage.tsdb.path=/prometheus'
-      - '--storage.tsdb.retention.time=7d'
-      - '--web.enable-lifecycle'
-    depends_on:
-      - backend
-      - alertmanager
-    restart: unless-stopped
-
-  # Alertmanager - Alert routing and notifications
-  alertmanager:
-    image: prom/alertmanager:v0.26.0
-    container_name: alertmanager
-    ports:
-      - "127.0.0.1:9093:9093"
-    volumes:
-      - ./monitoring/alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro
-      - alertmanager_data:/alertmanager
-    command:
-      - '--config.file=/etc/alertmanager/alertmanager.yml'
-      - '--storage.path=/alertmanager'
-      - '--web.listen-address=:9093'
-      - '--cluster.listen-address='
-    restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "wget", "-q", "--spider", "http://localhost:9093/-/healthy"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-
-  # Grafana - Metrics visualization
-  grafana:
-    image: grafana/grafana:10.2.0
-    container_name: grafana
-    ports:
-      - "127.0.0.1:3001:3000"
-    volumes:
-      - grafana_data:/var/lib/grafana
-      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
-      - ./monitoring/grafana/dashboards:/var/lib/grafana/dashboards:ro
-    environment:
-      - GF_SECURITY_ADMIN_USER=admin
-      - GF_SECURITY_ADMIN_PASSWORD=admin
-      - GF_USERS_ALLOW_SIGN_UP=false
-    depends_on:
-      - prometheus
-    restart: unless-stopped
+  # Monitoring (prometheus, grafana, alertmanager, dcgm-exporter) now lives in
+  # the nexus-observability repo. Prometheus joins the `ai-stack` network from
+  # there to scrape rag-backend:8000.
 
   # Frontend - React web UI
   frontend:
@@ -218,36 +163,6 @@ services:
       timeout: 10s
       retries: 3
 
-  # DCGM Exporter - NVIDIA GPU metrics for Prometheus (optional)
-  # Enable with: docker compose --profile gpu-monitoring up -d
-  dcgm-exporter:
-    image: nvcr.io/nvidia/k8s/dcgm-exporter:3.3.0-3.2.0-ubuntu22.04
-    container_name: dcgm-exporter
-    runtime: nvidia
-    ports:
-      - "9400:9400"
-    environment:
-      # Collect metrics every 10 seconds
-      - DCGM_EXPORTER_INTERVAL=10000
-      # Listen on all interfaces
-      - DCGM_EXPORTER_LISTEN=:9400
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: all
-              capabilities: [gpu]
-    profiles:
-      - gpu-monitoring
-    restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "wget", "-q", "--spider", "http://localhost:9400/metrics"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 30s
-
 volumes:
   ollama_data:
     name: cortex-ollama
@@ -257,12 +172,6 @@ volumes:
     name: cortex-redis
   postgres_data:
     name: cortex-postgres
-  prometheus_data:
-    name: cortex-prometheus
-  alertmanager_data:
-    name: cortex-alertmanager
-  grafana_data:
-    name: cortex-grafana
 
 networks:
   default:
