@@ -3,11 +3,11 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: ollama
-  namespace: ai-rag-stack
+  namespace: nexus-cortex
   labels:
     app.kubernetes.io/name: ollama
     app.kubernetes.io/component: llm
-    app.kubernetes.io/part-of: ai-rag-stack
+    app.kubernetes.io/part-of: nexus-cortex
     app.kubernetes.io/version: "0.5.4"
   annotations:
     description: "Ollama - Local LLM inference with GPU support"
@@ -24,7 +24,7 @@ spec:
       labels:
         app.kubernetes.io/name: ollama
         app.kubernetes.io/component: llm
-        app.kubernetes.io/part-of: ai-rag-stack
+        app.kubernetes.io/part-of: nexus-cortex
     spec:
       terminationGracePeriodSeconds: 60
 
@@ -110,11 +110,11 @@ apiVersion: v1
 kind: Service
 metadata:
   name: ollama
-  namespace: ai-rag-stack
+  namespace: nexus-cortex
   labels:
     app.kubernetes.io/name: ollama
     app.kubernetes.io/component: llm
-    app.kubernetes.io/part-of: ai-rag-stack
+    app.kubernetes.io/part-of: nexus-cortex
 spec:
   type: ClusterIP
   ports:
@@ -130,11 +130,11 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: ollama-data
-  namespace: ai-rag-stack
+  namespace: nexus-cortex
   labels:
     app.kubernetes.io/name: ollama
     app.kubernetes.io/component: storage
-    app.kubernetes.io/part-of: ai-rag-stack
+    app.kubernetes.io/part-of: nexus-cortex
 spec:
   accessModes:
     - ReadWriteOnce

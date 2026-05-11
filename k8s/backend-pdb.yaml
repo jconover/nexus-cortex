@@ -3,11 +3,11 @@ apiVersion: policy/v1
 kind: PodDisruptionBudget
 metadata:
   name: backend
-  namespace: ai-rag-stack
+  namespace: nexus-cortex
   labels:
     app.kubernetes.io/name: backend
     app.kubernetes.io/component: availability
-    app.kubernetes.io/part-of: ai-rag-stack
+    app.kubernetes.io/part-of: nexus-cortex
 spec:
   minAvailable: 1
   selector:

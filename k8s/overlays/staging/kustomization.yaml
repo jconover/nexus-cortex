@@ -3,9 +3,9 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 metadata:
-  name: ai-rag-stack-staging
+  name: nexus-cortex-staging
 
-namespace: ai-rag-stack-staging
+namespace: nexus-cortex-staging
 
 # Reference base configuration
 resources:
@@ -50,16 +50,16 @@ patches:
   - patch: |-
       - op: replace
         path: /spec/rules/0/host
-        value: staging.ai-rag.example.com
+        value: staging.nexus-cortex.example.com
     target:
       kind: Ingress
-      name: ai-rag-stack
+      name: nexus-cortex
 
 # Override images for staging
 images:
-  - name: jconover/ai-rag-backend
+  - name: jconover/nexuscortex-backend
     newTag: staging
-  - name: jconover/ai-rag-frontend
+  - name: jconover/nexuscortex-frontend
     newTag: staging
 
 # ConfigMap patches for staging

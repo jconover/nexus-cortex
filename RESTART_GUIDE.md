@@ -17,7 +17,7 @@ Quick reference for getting your AI DevOps Assistant back up and running after a
 **Everything in 3 commands:**
 
 ```bash
- cd ai-rag-stack
+ cd nexus-cortex
 make start
 make list-models  # Verify model is available
 ```
@@ -33,7 +33,7 @@ That's it! Everything should just work.
 ### Step 1: Navigate to Project Directory
 
 ```bash
- cd ai-rag-stack
+ cd nexus-cortex
 ```
 
 ### Step 2: Verify Docker is Running
@@ -609,7 +609,7 @@ Create a systemd service to manage the stack:
 
 ```bash
 # Create service file
-sudo nano /etc/systemd/system/ai-rag-stack.service
+sudo nano /etc/systemd/system/nexus-cortex.service
 ```
 
 ```ini
@@ -621,7 +621,7 @@ Requires=docker.service
 [Service]
 Type=oneshot
 RemainAfterExit=yes
-WorkingDirectory=/home/justin/Code/ai-rag-stack
+WorkingDirectory=/home/justin/Code/nexus-cortex
 ExecStart=/usr/bin/make start
 ExecStop=/usr/bin/make stop
 User=justin
@@ -633,11 +633,11 @@ WantedBy=multi-user.target
 ```bash
 # Enable and start
 sudo systemctl daemon-reload
-sudo systemctl enable ai-rag-stack.service
-sudo systemctl start ai-rag-stack.service
+sudo systemctl enable nexus-cortex.service
+sudo systemctl start nexus-cortex.service
 
 # Check status
-sudo systemctl status ai-rag-stack.service
+sudo systemctl status nexus-cortex.service
 ```
 
 ### Option 3: Cron @reboot
@@ -647,7 +647,7 @@ sudo systemctl status ai-rag-stack.service
 crontab -e
 
 # Add this line:
-@reboot sleep 30 &&  cd ai-rag-stack && make start
+@reboot sleep 30 &&  cd nexus-cortex && make start
 ```
 
 ---
@@ -704,7 +704,7 @@ A: Remove unused images: `docker system prune -a`
 **After any restart, just run:**
 
 ```bash
- cd ai-rag-stack
+ cd nexus-cortex
 make start
 ```
 

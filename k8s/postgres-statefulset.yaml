@@ -3,11 +3,11 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: postgres
-  namespace: ai-rag-stack
+  namespace: nexus-cortex
   labels:
     app.kubernetes.io/name: postgres
     app.kubernetes.io/component: database
-    app.kubernetes.io/part-of: ai-rag-stack
+    app.kubernetes.io/part-of: nexus-cortex
     app.kubernetes.io/version: "16"
   annotations:
     description: "PostgreSQL database for metadata and analytics"
@@ -23,7 +23,7 @@ spec:
       labels:
         app.kubernetes.io/name: postgres
         app.kubernetes.io/component: database
-        app.kubernetes.io/part-of: ai-rag-stack
+        app.kubernetes.io/part-of: nexus-cortex
     spec:
       terminationGracePeriodSeconds: 60
       securityContext:
@@ -121,11 +121,11 @@ apiVersion: v1
 kind: Service
 metadata:
   name: postgres
-  namespace: ai-rag-stack
+  namespace: nexus-cortex
   labels:
     app.kubernetes.io/name: postgres
     app.kubernetes.io/component: database
-    app.kubernetes.io/part-of: ai-rag-stack
+    app.kubernetes.io/part-of: nexus-cortex
 spec:
   type: ClusterIP
   ports:
@@ -142,11 +142,11 @@ apiVersion: v1
 kind: Service
 metadata:
   name: postgres-headless
-  namespace: ai-rag-stack
+  namespace: nexus-cortex
   labels:
     app.kubernetes.io/name: postgres
     app.kubernetes.io/component: database
-    app.kubernetes.io/part-of: ai-rag-stack
+    app.kubernetes.io/part-of: nexus-cortex
 spec:
   type: ClusterIP
   clusterIP: None
@@ -162,10 +162,10 @@ apiVersion: policy/v1
 kind: PodDisruptionBudget
 metadata:
   name: postgres
-  namespace: ai-rag-stack
+  namespace: nexus-cortex
   labels:
     app.kubernetes.io/name: postgres
-    app.kubernetes.io/part-of: ai-rag-stack
+    app.kubernetes.io/part-of: nexus-cortex
 spec:
   minAvailable: 1
   selector:

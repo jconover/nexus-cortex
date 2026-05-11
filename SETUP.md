@@ -49,7 +49,7 @@ Complete setup instructions for getting your local LLM RAG system running.
 
 1. **Clone and Setup**
    ```bash
-    cd ai-rag-stack
+    cd nexus-cortex
    make setup
    ```
 

@@ -3,9 +3,9 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 metadata:
-  name: ai-rag-stack-production
+  name: nexus-cortex-production
 
-namespace: ai-rag-stack
+namespace: nexus-cortex
 
 # Reference base configuration
 resources:
@@ -72,11 +72,11 @@ patches:
         path: /spec/tls
         value:
           - hosts:
-              - ai-rag.example.com
-            secretName: ai-rag-tls
+              - nexus-cortex.example.com
+            secretName: nexus-cortex-tls
     target:
       kind: Ingress
-      name: ai-rag-stack
+      name: nexus-cortex
 
   # Higher resource limits for production backend
   - patch: |-
@@ -98,9 +98,9 @@ patches:
 
 # Override images for production (use specific version tags)
 images:
-  - name: jconover/ai-rag-backend
+  - name: jconover/nexuscortex-backend
     newTag: v1.0.0
-  - name: jconover/ai-rag-frontend
+  - name: jconover/nexuscortex-frontend
     newTag: v1.0.0
   - name: qdrant/qdrant
     newTag: v1.12.4

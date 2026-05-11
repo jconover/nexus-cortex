@@ -46,8 +46,8 @@ Edit `secret.yaml` and replace placeholder values:
 vi k8s/secret.yaml
 
 # Or use kubectl to create secrets directly
-kubectl create namespace ai-rag-stack
-kubectl -n ai-rag-stack create secret generic backend-secrets \
+kubectl create namespace nexus-cortex
+kubectl -n nexus-cortex create secret generic backend-secrets \
   --from-literal=POSTGRES_USER=raguser \
   --from-literal=POSTGRES_PASSWORD=<your-password> \
   --from-literal=TAVILY_API_KEY=<your-api-key>
@@ -72,23 +72,23 @@ kubectl apply -k k8s/overlays/production
 
 ```bash
 # Check all pods are running
-kubectl -n ai-rag-stack get pods
+kubectl -n nexus-cortex get pods
 
 # Check services
-kubectl -n ai-rag-stack get svc
+kubectl -n nexus-cortex get svc
 
 # Check ingress
-kubectl -n ai-rag-stack get ingress
+kubectl -n nexus-cortex get ingress
 
 # View backend logs
-kubectl -n ai-rag-stack logs -f deployment/backend
+kubectl -n nexus-cortex logs -f deployment/backend
 ```
 
 ### 4. Pull LLM Model
 
 ```bash
 # Exec into Ollama pod and pull model
-kubectl -n ai-rag-stack exec -it deployment/ollama -- ollama pull llama3.1:8b
+kubectl -n nexus-cortex exec -it deployment/ollama -- ollama pull llama3.1:8b
 ```
 
 ## Environment Overlays
@@ -132,7 +132,7 @@ spec:
   tls:
     - hosts:
         - your-domain.example.com
-      secretName: ai-rag-tls
+      secretName: nexus-cortex-tls
 ```
 
 ### GPU Support (Ollama)
@@ -174,12 +174,12 @@ The backend exposes Prometheus metrics at `/metrics`. Configure Prometheus to sc
 
 ```yaml
 scrape_configs:
-  - job_name: 'ai-rag-backend'
+  - job_name: 'nexuscortex-backend'
     kubernetes_sd_configs:
       - role: pod
         namespaces:
           names:
-            - ai-rag-stack
+            - nexus-cortex
     relabel_configs:
       - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
         action: keep
@@ -215,25 +215,25 @@ For production, consider:
 
 ```bash
 # Check pod events
-kubectl -n ai-rag-stack describe pod <pod-name>
+kubectl -n nexus-cortex describe pod <pod-name>
 
 # Check logs
-kubectl -n ai-rag-stack logs <pod-name>
+kubectl -n nexus-cortex logs <pod-name>
 ```
 
 ### Backend not connecting to services
 
 ```bash
 # Test connectivity
-kubectl -n ai-rag-stack exec -it deployment/backend -- nc -zv qdrant 6333
-kubectl -n ai-rag-stack exec -it deployment/backend -- nc -zv redis 6379
+kubectl -n nexus-cortex exec -it deployment/backend -- nc -zv qdrant 6333
+kubectl -n nexus-cortex exec -it deployment/backend -- nc -zv redis 6379
 ```
 
 ### Ollama GPU issues
 
 ```bash
 # Check GPU availability
-kubectl -n ai-rag-stack exec -it deployment/ollama -- nvidia-smi
+kubectl -n nexus-cortex exec -it deployment/ollama -- nvidia-smi
 ```
 
 ## Scaling
@@ -241,7 +241,7 @@ kubectl -n ai-rag-stack exec -it deployment/ollama -- nvidia-smi
 ### Manual Scaling
 
 ```bash
-kubectl -n ai-rag-stack scale deployment/backend --replicas=5
+kubectl -n nexus-cortex scale deployment/backend --replicas=5
 ```
 
 ### HPA Configuration

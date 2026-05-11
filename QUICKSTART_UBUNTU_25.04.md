@@ -15,7 +15,7 @@ Your system is **ready to go**! Here's the fastest path to get the AI assistant 
 ### 1. Verify Everything is Ready
 
 ```bash
- cd ai-rag-stack
+ cd nexus-cortex
 bash scripts/verify_setup.sh
 ```
 

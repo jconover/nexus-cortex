@@ -1,4 +1,4 @@
-# DevOps AI Assistant - Local LLM with RAG
+# NexusCortex — DevOps AI Assistant
 
 A production-ready AI assistant powered by local LLMs (Ollama) with Retrieval-Augmented Generation (RAG) for DevOps and programming documentation. Query Kubernetes, Terraform, Docker, Python, Go, Bash, and other tools using natural language.
 
@@ -51,8 +51,8 @@ A production-ready AI assistant powered by local LLMs (Ollama) with Retrieval-Au
 
 ```bash
 # Clone the repository
-git clone https://github.com/jconover/ai-rag-stack.git
-cd ai-rag-stack
+git clone https://github.com/jconover/nexus-cortex.git
+cd nexus-cortex
 
 # Pull and start all services (uses pre-built images from Docker Hub)
 docker compose pull
@@ -72,8 +72,8 @@ open http://localhost:3000
 
 ```bash
 # Clone the repository
-git clone https://github.com/jconover/ai-rag-stack.git
-cd ai-rag-stack
+git clone https://github.com/jconover/nexus-cortex.git
+cd nexus-cortex
 
 # Use the dev compose file with local builds
 docker compose -f docker-compose.dev.yml up -d --build
@@ -280,7 +280,7 @@ See [n8n-workflows/README.md](n8n-workflows/README.md) for complete setup instru
 ## Project Structure
 
 ```
-ai-rag-stack/
+nexus-cortex/
 ├── backend/                 # FastAPI application
 │   ├── app/
 │   │   ├── main.py         # API entry point
@@ -413,8 +413,8 @@ The script will:
 4. Display the image URLs
 
 **Docker Hub Images:**
-- Backend: [jconover/ai-rag-backend](https://hub.docker.com/r/jconover/ai-rag-backend)
-- Frontend: [jconover/ai-rag-frontend](https://hub.docker.com/r/jconover/ai-rag-frontend)
+- Backend: [jconover/nexuscortex-backend](https://hub.docker.com/r/jconover/nexuscortex-backend)
+- Frontend: [jconover/nexuscortex-frontend](https://hub.docker.com/r/jconover/nexuscortex-frontend)
 
 ## AI Coding Assistant (Aider)
 
@@ -460,7 +460,7 @@ aider --model ollama/qwen2.5-coder:7b --edit-format diff
 $ make aider
 Aider v0.59.0
 Model: qwen2.5-coder:7b with diff edit format
-Git repo: /home/user/ai-rag-stack
+Git repo: /home/user/nexus-cortex
 
 > Add a new API endpoint to export chat history as JSON
 

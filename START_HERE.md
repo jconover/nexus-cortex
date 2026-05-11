@@ -1,4 +1,4 @@
-# 🚀 START HERE - DevOps AI Assistant
+# 🚀 START HERE - NexusCortex
 
 Welcome to your AI-powered DevOps assistant! This guide will get you running in **5 minutes**.
 
@@ -9,7 +9,7 @@ Good news: Your Ubuntu 25.04 system with RTX 3090 is **already verified and read
 ## 📋 Quick Start (3 Commands)
 
 ```bash
- cd ai-rag-stack
+ cd nexus-cortex
 
 # 1. Setup environment
 make setup
@@ -236,7 +236,7 @@ This project demonstrates:
 ## 🏁 Ready? Let's Go!
 
 ```bash
- cd ai-rag-stack
+ cd nexus-cortex
 make setup && make start
 ```
 

@@ -198,7 +198,7 @@ jobs:
           context: ${{ matrix.service.context }}
           file: ${{ matrix.service.dockerfile }}
           push: false
-          tags: ai-rag-${{ matrix.service.name }}:test
+          tags: nexuscortex-${{ matrix.service.name }}:test
           cache-from: type=gha
           cache-to: type=gha,mode=max
 

@@ -1,3 +1,5 @@
+name: nexus-cortex
+
 services:
   # Ollama - Local LLM inference with GPU support
   ollama:
@@ -97,7 +99,7 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    # image: jconover/ai-rag-backend:latest  # Uncomment to use Docker Hub image
+    # image: jconover/nexuscortex-backend:latest  # Uncomment to use Docker Hub image
     container_name: rag-backend
     ports:
       - "8000:8000"
@@ -203,7 +205,7 @@ services:
 
   # Frontend - React web UI
   frontend:
-    image: jconover/ai-rag-frontend:latest
+    image: jconover/nexuscortex-frontend:latest
     container_name: rag-frontend
     ports:
       - "3000:80"
@@ -248,20 +250,21 @@ services:
 
 volumes:
   ollama_data:
-    driver: local
+    name: cortex-ollama
   qdrant_data:
-    driver: local
+    name: cortex-qdrant
   redis_data:
-    driver: local
+    name: cortex-redis
   postgres_data:
-    driver: local
+    name: cortex-postgres
   prometheus_data:
-    driver: local
+    name: cortex-prometheus
   alertmanager_data:
-    driver: local
+    name: cortex-alertmanager
   grafana_data:
-    driver: local
+    name: cortex-grafana
 
 networks:
   default:
-    name: rag-network
+    name: ai-stack
+    external: true

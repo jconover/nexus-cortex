@@ -1,3 +1,5 @@
+name: nexus-cortex
+
 services:
   # Ollama - Local LLM inference with GPU support
   ollama:
@@ -184,18 +186,19 @@ services:
 
 volumes:
   ollama_data:
-    driver: local
+    name: cortex-ollama
   qdrant_data:
-    driver: local
+    name: cortex-qdrant
   redis_data:
-    driver: local
+    name: cortex-redis
   postgres_data:
-    driver: local
+    name: cortex-postgres
   prometheus_data:
-    driver: local
+    name: cortex-prometheus
   grafana_data:
-    driver: local
+    name: cortex-grafana
 
 networks:
   default:
-    name: rag-network
+    name: ai-stack
+    external: true

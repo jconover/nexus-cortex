@@ -4,11 +4,11 @@ apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: default-deny-ingress
-  namespace: ai-rag-stack
+  namespace: nexus-cortex
   labels:
     app.kubernetes.io/name: network-policy
     app.kubernetes.io/component: security
-    app.kubernetes.io/part-of: ai-rag-stack
+    app.kubernetes.io/part-of: nexus-cortex
 spec:
   podSelector: {}
   policyTypes:
@@ -19,11 +19,11 @@ apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: backend-network-policy
-  namespace: ai-rag-stack
+  namespace: nexus-cortex
   labels:
     app.kubernetes.io/name: backend
     app.kubernetes.io/component: network-policy
-    app.kubernetes.io/part-of: ai-rag-stack
+    app.kubernetes.io/part-of: nexus-cortex
 spec:
   podSelector:
     matchLabels:
@@ -129,11 +129,11 @@ apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: qdrant-network-policy
-  namespace: ai-rag-stack
+  namespace: nexus-cortex
   labels:
     app.kubernetes.io/name: qdrant
     app.kubernetes.io/component: network-policy
-    app.kubernetes.io/part-of: ai-rag-stack
+    app.kubernetes.io/part-of: nexus-cortex
 spec:
   podSelector:
     matchLabels:
@@ -170,11 +170,11 @@ apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: redis-network-policy
-  namespace: ai-rag-stack
+  namespace: nexus-cortex
   labels:
     app.kubernetes.io/name: redis
     app.kubernetes.io/component: network-policy
-    app.kubernetes.io/part-of: ai-rag-stack
+    app.kubernetes.io/part-of: nexus-cortex
 spec:
   podSelector:
     matchLabels:
@@ -209,11 +209,11 @@ apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: frontend-network-policy
-  namespace: ai-rag-stack
+  namespace: nexus-cortex
   labels:
     app.kubernetes.io/name: frontend
     app.kubernetes.io/component: network-policy
-    app.kubernetes.io/part-of: ai-rag-stack
+    app.kubernetes.io/part-of: nexus-cortex
 spec:
   podSelector:
     matchLabels:

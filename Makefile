@@ -1,7 +1,7 @@
 .PHONY: help verify setup start start-dev stop restart logs clean pull-model ingest health publish aider aider-32b aider-deepseek aider-deepseek-33b setup-aider setup-aider-deepseek update-docs grafana prometheus backup backup-verify partition-query-logs partition-status partition-create partition-drop-old model-deploy model-history model-active model-rollback model-stats
 
 help:
-	@echo "DevOps AI Assistant - Available Commands"
+	@echo "NexusCortex (DevOps AI Assistant) - Available Commands"
 	@echo "========================================"
 	@echo "verify         - Verify system requirements (Docker, GPU, etc.)"
 	@echo "setup          - Initial setup (copy .env, create directories)"
@@ -60,6 +60,7 @@ setup:
 
 start:
 	@echo "Starting all services (using Docker Hub images)..."
+	@docker network inspect ai-stack >/dev/null 2>&1 || docker network create ai-stack
 	docker compose pull
 	docker compose up -d
 	@echo "Waiting for services to be ready..."
@@ -73,6 +74,7 @@ start:
 
 start-dev:
 	@echo "Starting all services in DEV mode (building locally)..."
+	@docker network inspect ai-stack >/dev/null 2>&1 || docker network create ai-stack
 	docker compose -f docker-compose.dev.yml up -d --build
 	@echo "Waiting for services to be ready..."
 	@sleep 10

@@ -8,14 +8,14 @@ set -e  # Exit on error
 
 # Configuration
 DOCKER_USERNAME="jconover"
-BACKEND_IMAGE="ai-rag-backend"
-FRONTEND_IMAGE="ai-rag-frontend"
+BACKEND_IMAGE="nexuscortex-backend"
+FRONTEND_IMAGE="nexuscortex-frontend"
 
 # Get version from argument or use 'latest' as default
 VERSION="${1:-latest}"
 
 echo "=================================================="
-echo "Building and Pushing AI RAG Stack to Docker Hub"
+echo "Building and Pushing NexusCortex to Docker Hub"
 echo "=================================================="
 echo "Docker Hub Username: $DOCKER_USERNAME"
 echo "Version: $VERSION"

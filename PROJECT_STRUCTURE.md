@@ -3,7 +3,7 @@
 Complete file tree and description of the DevOps AI Assistant RAG system.
 
 ```
-ai-rag-stack/
+nexus-cortex/
 │
 ├── README.md                          # Main project documentation
 ├── QUICKSTART_UBUNTU_25.04.md        # Fast setup for Ubuntu 25.04

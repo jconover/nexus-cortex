@@ -13,8 +13,8 @@ on:
 
 env:
   REGISTRY: docker.io
-  BACKEND_IMAGE: jconover/ai-rag-backend
-  FRONTEND_IMAGE: jconover/ai-rag-frontend
+  BACKEND_IMAGE: jconover/nexuscortex-backend
+  FRONTEND_IMAGE: jconover/nexuscortex-frontend
 
 jobs:
   build-backend:

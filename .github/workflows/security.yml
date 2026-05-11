@@ -31,8 +31,8 @@ permissions:
   actions: read
 
 env:
-  BACKEND_IMAGE: jconover/ai-rag-backend:latest
-  FRONTEND_IMAGE: jconover/ai-rag-frontend:latest
+  BACKEND_IMAGE: jconover/nexuscortex-backend:latest
+  FRONTEND_IMAGE: jconover/nexuscortex-frontend:latest
 
 jobs:
   # ===========================================================================
@@ -45,9 +45,9 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - image: jconover/ai-rag-backend:latest
+          - image: jconover/nexuscortex-backend:latest
             name: backend
-          - image: jconover/ai-rag-frontend:latest
+          - image: jconover/nexuscortex-frontend:latest
             name: frontend
 
     steps:

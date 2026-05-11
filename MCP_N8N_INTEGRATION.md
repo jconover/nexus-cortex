@@ -19,7 +19,7 @@ You can create an MCP server that exposes your RAG system to Claude desktop or o
 from mcp import Server
 from your_rag import search_documents
 
-server = Server("ai-rag-stack")
+server = Server("nexus-cortex")
 
 @server.tool()
 def search_devops_docs(query: str, top_k: int = 5):
@@ -312,14 +312,14 @@ if __name__ == "__main__":
       "name": "Pull Documentation",
       "type": "n8n-nodes-base.executeCommand",
       "parameters": {
-        "command": "cd /path/to/ai-rag-stack && make download-docs"
+        "command": "cd /path/to/nexus-cortex && make download-docs"
       }
     },
     {
       "name": "Re-ingest Docs",
       "type": "n8n-nodes-base.executeCommand",
       "parameters": {
-        "command": "cd /path/to/ai-rag-stack && make ingest"
+        "command": "cd /path/to/nexus-cortex && make ingest"
       }
     },
     {

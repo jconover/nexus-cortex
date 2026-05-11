@@ -3,11 +3,11 @@ apiVersion: v1
 kind: Service
 metadata:
   name: backend
-  namespace: ai-rag-stack
+  namespace: nexus-cortex
   labels:
     app.kubernetes.io/name: backend
     app.kubernetes.io/component: api
-    app.kubernetes.io/part-of: ai-rag-stack
+    app.kubernetes.io/part-of: nexus-cortex
   annotations:
     prometheus.io/scrape: "true"
     prometheus.io/port: "8000"

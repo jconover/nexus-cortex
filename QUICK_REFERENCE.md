@@ -1,4 +1,4 @@
-# AI RAG Stack - Quick Reference
+# NexusCortex - Quick Reference
 
 ## Essential Commands
 
@@ -88,7 +88,7 @@ make publish        # Build and push images
 ## File Locations
 
 ```
-ai-rag-stack/
+nexus-cortex/
 ├── frontend/src/App.js          # Frontend React app
 ├── backend/app/main.py          # Backend API
 ├── scripts/download_docs.sh     # Doc downloader
@@ -169,10 +169,10 @@ make logs-ollama
 - **README.md** - Full project documentation
 - **AIDER_QUICKSTART.md** - Aider usage guide
 - **DOCUMENTATION_GUIDE.md** - Documentation management
-- **GitHub**: https://github.com/jconover/ai-rag-stack
+- **GitHub**: https://github.com/jconover/nexus-cortex
 - **Docker Hub**:
-  - https://hub.docker.com/r/jconover/ai-rag-backend
-  - https://hub.docker.com/r/jconover/ai-rag-frontend
+  - https://hub.docker.com/r/jconover/nexuscortex-backend
+  - https://hub.docker.com/r/jconover/nexuscortex-frontend
 
 ---
 

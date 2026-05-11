@@ -3,17 +3,17 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 metadata:
-  name: ai-rag-stack
+  name: nexus-cortex
   annotations:
     description: "DevOps AI Assistant - RAG system using local LLMs"
 
 # Namespace for all resources
-namespace: ai-rag-stack
+namespace: nexus-cortex
 
 # Common labels applied to all resources
 labels:
   - pairs:
-      app.kubernetes.io/part-of: ai-rag-stack
+      app.kubernetes.io/part-of: nexus-cortex
       app.kubernetes.io/managed-by: kustomize
     includeSelectors: false
 
@@ -45,9 +45,9 @@ resources:
 
 # Image customization (override images for different environments)
 images:
-  - name: jconover/ai-rag-backend
+  - name: jconover/nexuscortex-backend
     newTag: latest
-  - name: jconover/ai-rag-frontend
+  - name: jconover/nexuscortex-frontend
     newTag: latest
   - name: qdrant/qdrant
     newTag: v1.12.4

@@ -134,10 +134,10 @@ If you don't want notifications:
 Update the path to your AI RAG Stack in the **"Update Documentation"** node:
 
 ```bash
-cd /home/justin/Code/ai-rag-stack && make update-docs
+cd /home/justin/Code/nexus-cortex && make update-docs
 ```
 
-Replace `/home/justin/Code/ai-rag-stack` with your actual path.
+Replace `/home/justin/Code/nexus-cortex` with your actual path.
 
 ### Step 5: Activate Workflow
 
@@ -277,7 +277,7 @@ AI RAG Stack - Documentation Update Report
 The workflow logs all update events to:
 
 ```
-/home/justin/Code/ai-rag-stack/data/update-log.json
+/home/justin/Code/nexus-cortex/data/update-log.json
 ```
 
 **Log Format:**
@@ -353,7 +353,7 @@ Add custom nodes to:
 ### Update Script Fails
 
 **Check:**
-1. Does the path exist? `ls /home/justin/Code/ai-rag-stack`
+1. Does the path exist? `ls /home/justin/Code/nexus-cortex`
 2. Is the update script executable? `chmod +x scripts/update_docs.sh`
 3. Are git repositories valid? `cd data/docs/kubernetes && git status`
 4. Run manually: `make update-docs`
