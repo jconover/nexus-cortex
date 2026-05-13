@@ -101,6 +101,7 @@ services:
       dockerfile: Dockerfile
     # image: jconover/nexuscortex-backend:latest  # Uncomment to use Docker Hub image
     container_name: rag-backend
+    runtime: nvidia
     ports:
       - "8000:8000"
     volumes:
@@ -112,7 +113,12 @@ services:
       resources:
         limits:
           cpus: '4'
-          memory: 4G
+          memory: 8G
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
     environment:
       - OLLAMA_HOST=http://ollama:11434
       - QDRANT_HOST=qdrant

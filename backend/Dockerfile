@@ -36,9 +36,9 @@ ENV PATH="/opt/venv/bin:$PATH"
 # Copy only requirements for better layer caching
 COPY requirements.txt .
 
-# Install CPU-only PyTorch first (saves ~5GB by excluding CUDA)
-# This must be done before requirements.txt to override the torch version
-RUN pip install --no-cache-dir torch --index-url https://download.pytorch.org/whl/cpu
+# Install CUDA-enabled PyTorch (cu121) before requirements.txt to pin the GPU build
+# Requires nvidia container runtime + NVIDIA_VISIBLE_DEVICES at runtime
+RUN pip install --no-cache-dir torch --index-url https://download.pytorch.org/whl/cu121
 
 # Install dependencies (exclude dev-only packages, keep pytest for testing)
 # Filter out linting/formatting tools but keep testing dependencies
@@ -74,8 +74,10 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 WORKDIR /app
 
 # Install only runtime dependencies (no build tools)
-# - libgomp1: Required for torch CPU operations (OpenMP)
+# - libgomp1: Required for torch OpenMP operations
 # - curl: Required for health checks
+# CUDA libs are bundled inside the torch wheel; nvidia driver is mounted by the
+# nvidia container runtime at runtime, so no CUDA base image is required.
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libgomp1 \
     curl \
