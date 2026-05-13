@@ -21,6 +21,7 @@ make logs-backend       # View backend logs
 make pull-model         # Pull llama3.1:8b (default)
 make pull-model MODEL=mistral:7b  # Pull specific model
 make ingest             # Download and index all documentation
+make ingest-recreate    # Ingest and recreate collection on schema mismatch
 
 # Operations
 make health             # Service health check
@@ -94,7 +95,7 @@ Markdown/Text → LangChain DirectoryLoader → RecursiveCharacterTextSplitter
 - **Top K**: 5 documents per query
 - **Collection**: `devops_docs` in Qdrant
 
-> **Note**: Changing the embedding model requires full re-ingestion of all documents. Run `make ingest` after modifying `EMBEDDING_MODEL` or `EMBEDDING_DIMENSION` in `.env`.
+> **Note**: Changing the embedding model or toggling `HYBRID_SEARCH_ENABLED` requires full re-ingestion of all documents. Run `make ingest-recreate` after modifying `EMBEDDING_MODEL`, `EMBEDDING_DIMENSION`, or `HYBRID_SEARCH_ENABLED` in `.env`.
 
 ### Environment Variables (`.env`)
 

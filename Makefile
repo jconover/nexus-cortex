@@ -156,6 +156,10 @@ ingest: download-docs
 	@echo "Ingesting documentation into vector database..."
 	docker exec rag-backend python /scripts/ingest_docs.py
 
+ingest-recreate: download-docs
+	@echo "Ingesting documentation and recreating collection if schema mismatch detected..."
+	docker exec rag-backend python /scripts/ingest_docs.py --recreate-collection
+
 download-docs:
 	@echo "Downloading DevOps documentation..."
 	bash scripts/download_docs.sh data/docs

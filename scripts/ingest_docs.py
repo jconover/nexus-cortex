@@ -578,6 +578,7 @@ class DocumentIngestionPipeline:
         enable_deduplication: bool = None,
         enable_fuzzy_deduplication: bool = None,
         fuzzy_threshold: float = None,
+        recreate_collection: bool = False,
     ):
         """
         Initialize the ingestion pipeline.
@@ -593,7 +594,9 @@ class DocumentIngestionPipeline:
                                        If None, read from FUZZY_DEDUPLICATION_ENABLED env var.
             fuzzy_threshold: Similarity threshold for fuzzy deduplication (0.0-1.0).
                             If None, read from FUZZY_DEDUPLICATION_THRESHOLD env var.
+            recreate_collection: If True, drop and recreate collection on schema mismatch.
         """
+        self.recreate_collection = recreate_collection
         # Deduplication settings
         self.enable_deduplication = (
             enable_deduplication if enable_deduplication is not None
@@ -992,7 +995,52 @@ class DocumentIngestionPipeline:
             print(f"Created collection '{collection_name}' with hybrid vector support "
                   f"(dense: {EMBEDDING_DIMENSION} dims)")
         else:
-            print(f"Collection '{collection_name}' already exists")
+            print(f"Collection '{collection_name}' already exists. Validating schema...")
+            collection_info = self.client.get_collection(collection_name)
+            
+            # Validate dense vector
+            vectors_config = collection_info.config.params.vectors
+            dense_valid = False
+            actual_dim = 0
+            
+            if isinstance(vectors_config, dict):
+                if DENSE_VECTOR_NAME in vectors_config:
+                    actual_dim = vectors_config[DENSE_VECTOR_NAME].size
+                    if actual_dim == EMBEDDING_DIMENSION:
+                        dense_valid = True
+            
+            # Validate sparse vector if hybrid search is enabled
+            sparse_vectors_config = collection_info.config.params.sparse_vectors
+            sparse_valid = False
+            if sparse_vectors_config and SPARSE_VECTOR_NAME in sparse_vectors_config:
+                sparse_valid = True
+            
+            errors = []
+            if not dense_valid:
+                errors.append(f"Dense vector '{DENSE_VECTOR_NAME}' dimension mismatch: "
+                             f"expected {EMBEDDING_DIMENSION}, found {actual_dim}")
+            
+            if self.use_hybrid and not sparse_valid:
+                errors.append(f"Hybrid search enabled but collection lacks sparse vector '{SPARSE_VECTOR_NAME}'")
+            
+            if errors:
+                error_msg = "\n".join([f"  - {e}" for e in errors])
+                print(f"\nSCHEMA MISMATCH DETECTED for collection '{collection_name}':")
+                print(error_msg)
+                
+                if self.recreate_collection:
+                    print(f"\nRecreating collection '{collection_name}' as requested...")
+                    self.client.delete_collection(collection_name)
+                    self._ensure_hybrid_collection(collection_name)
+                else:
+                    print(f"\nREMEDIATION:")
+                    print(f"1. Run with --recreate-collection to automatically drop and recreate the collection.")
+                    print(f"   WARNING: This will delete all existing vectors in '{collection_name}'.")
+                    print(f"2. Or, manually delete the collection: curl -X DELETE http://{QDRANT_HOST}:{QDRANT_PORT}/collections/{collection_name}")
+                    print(f"3. Then re-run ingestion: make ingest")
+                    sys.exit(1)
+            else:
+                print(f"Schema validation passed for '{collection_name}'")
 
     def _ingest_hybrid(self, chunks: List[Document], collection_name: str, batch_size: int = 100):
         """Ingest documents with both dense and sparse vectors using idempotent UUIDs.
@@ -1346,7 +1394,50 @@ class DocumentIngestionPipeline:
             print(f"Created collection '{collection_name}' with dense vectors "
                   f"({EMBEDDING_DIMENSION} dims)")
         else:
-            print(f"Collection '{collection_name}' already exists")
+            print(f"Collection '{collection_name}' already exists. Validating schema...")
+            collection_info = self.client.get_collection(collection_name)
+            
+            # Validate dense vector
+            vectors_config = collection_info.config.params.vectors
+            dense_valid = False
+            actual_dim = 0
+            
+            # In dense-only collection, vectors_config is often a single VectorParams, 
+            # but it could also be a dict if it was previously hybrid
+            if isinstance(vectors_config, VectorParams):
+                actual_dim = vectors_config.size
+                if actual_dim == EMBEDDING_DIMENSION:
+                    dense_valid = True
+            elif isinstance(vectors_config, dict):
+                # If it's a dict, we look for 'dense' name if we use named vectors,
+                # or it might be the default unnamed vector if configured that way.
+                # In this project, we use 'dense' as the key in hybrid mode.
+                if DENSE_VECTOR_NAME in vectors_config:
+                    actual_dim = vectors_config[DENSE_VECTOR_NAME].size
+                    if actual_dim == EMBEDDING_DIMENSION:
+                        dense_valid = True
+                else:
+                    # Check if there's an unnamed vector (empty string key or similar)
+                    # Qdrant unnamed vector shows up differently in some versions.
+                    pass
+
+            if not dense_valid:
+                print(f"\nSCHEMA MISMATCH DETECTED for collection '{collection_name}':")
+                print(f"  - Dense vector dimension mismatch: expected {EMBEDDING_DIMENSION}, found {actual_dim}")
+                
+                if self.recreate_collection:
+                    print(f"\nRecreating collection '{collection_name}' as requested...")
+                    self.client.delete_collection(collection_name)
+                    self._ensure_dense_collection(collection_name)
+                else:
+                    print(f"\nREMEDIATION:")
+                    print(f"1. Run with --recreate-collection to automatically drop and recreate the collection.")
+                    print(f"   WARNING: This will delete all existing vectors in '{collection_name}'.")
+                    print(f"2. Or, manually delete the collection: curl -X DELETE http://{QDRANT_HOST}:{QDRANT_PORT}/collections/{collection_name}")
+                    print(f"3. Then re-run ingestion: make ingest")
+                    sys.exit(1)
+            else:
+                print(f"Schema validation passed for '{collection_name}'")
 
     def _ingest_dense_only(self, chunks: List[Document], collection_name: str, batch_size: int = 100):
         """Ingest documents with dense vectors only using idempotent UUIDs.
@@ -1762,6 +1853,12 @@ Fuzzy deduplication can catch near-duplicates with minor differences.
     )
 
     parser.add_argument(
+        '--recreate-collection',
+        action='store_true',
+        help='Drop and recreate the Qdrant collection if schema mismatch is detected'
+    )
+
+    parser.add_argument(
         '--legacy-chunking',
         action='store_true',
         help='Use legacy RecursiveCharacterTextSplitter instead of semantic chunking'
@@ -1854,7 +1951,6 @@ def main():
         print()
 
         # Create minimal pipeline just for Qdrant client (skip embedding model)
-        from qdrant_client import QdrantClient
         client = QdrantClient(host=QDRANT_HOST, port=QDRANT_PORT)
 
         # Create a temporary pipeline instance for the check_duplicates method
@@ -1996,6 +2092,7 @@ def main():
         enable_deduplication=enable_dedup,
         enable_fuzzy_deduplication=enable_fuzzy,
         fuzzy_threshold=fuzzy_threshold,
+        recreate_collection=args.recreate_collection,
     )
     pipeline.run(
         use_raw_loading=use_semantic,
