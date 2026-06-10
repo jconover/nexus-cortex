@@ -75,6 +75,8 @@ models/
 .claude/*
 .claude/*/*
 .omc/*
+.omc/*/*
+.omc/*/*/*
 
 # Session artifacts (ephemeral, developer-local)
 SESSION_SUMMARY.md
