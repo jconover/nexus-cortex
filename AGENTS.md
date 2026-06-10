@@ -53,9 +53,9 @@ Redis (conversation memory / embedding cache) + PostgreSQL (analytics, auth, exp
 - The `.env` file drives nearly all behavior. Changing `EMBEDDING_MODEL`, `EMBEDDING_DIMENSION`,
   or `HYBRID_SEARCH_ENABLED` requires full re-ingestion: `make ingest-recreate`.
 - Backend code changes need `docker compose restart backend` (or rely on dev hot-reload).
-- `CLAUDE.md` describes the system as embedding-on-CPU, but recent commits run embeddings and
-  the reranker on GPU (cu121). Verify device via `GET /api/health` (`device_info`) rather than
-  assuming.
+- Embedding/reranker device is `auto` (CUDA/MPS when available, else CPU); the GPU images
+  (`Dockerfile.gpu`, cu121) run them on GPU. Verify the actual device via `GET /api/health`
+  (`device_info`) rather than assuming.
 
 ### Testing Requirements
 - Backend tests: `cd backend && pytest` (config in `backend/pytest.ini`).
