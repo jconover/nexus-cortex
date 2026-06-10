@@ -142,11 +142,11 @@ Frontend (React:3000) → Backend (FastAPI:8000) → Ollama   (LLM:11434)
 | Chat | `POST /api/chat`, `POST /api/chat/stream`, `POST /api/agent/chat` |
 | Health | `GET /api/health`, `/api/health/live`, `/api/health/ready` |
 | Models/Stats | `GET /api/models`, `/api/stats`, `/api/ollama-status`, `/api/gpu-metrics` |
-| Conversation | `GET/DELETE /api/conversation/{id}` (+ `/context`, `/stats`), `GET /api/history/{id}` |
+| Conversation | `DELETE /api/conversation/{id}`, `GET /api/conversation/{id}/context`, `GET /api/conversation/{id}/stats`, `GET /api/history/{id}` |
 | Templates | `GET /api/templates` (+ `/{id}`), `POST /api/templates/render` |
 | Upload | `POST /api/upload` |
 | Feedback | `POST /api/feedback`, `GET /api/feedback/summary` |
-| Auth | `POST /api/auth/register`, `/login`, `/logout`; `GET /api/auth/me`; `*/api/auth/api-keys` |
+| Auth | `POST /api/auth/register`, `/login`, `/logout`; `GET/PUT /api/auth/me`; `*/api/auth/api-keys` |
 | A/B Testing | `*/api/experiments` (+ `/{id}`, `/assignment`) |
 | Analytics | `GET /api/analytics/realtime`, `/api/analytics/queries` (+ `/summary`), `/api/metrics/retrieval` |
 | Drift | `GET /api/metrics/drift` (+ `/status`, `/history`), `POST /api/metrics/drift/baseline`, `/reset` |
